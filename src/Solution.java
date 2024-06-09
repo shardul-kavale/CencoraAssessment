@@ -9,10 +9,8 @@ public class Solution {
     private static List<String> path = new ArrayList<>();
     private static int row = -1, col = -1;
     private static char[][] map;
-    private static Set<Character> pathModifiers = Set.of('N', 'S', 'E', 'W');
-
-
-
+    private static Set<String> visited = new HashSet<>();
+    private static int counter = 0;
 
     private static void flipDirections() {
         reversedDirections = !reversedDirections;
@@ -132,18 +130,26 @@ public class Solution {
 
         //Start Game:
         while(true){
+            //next potential position:
             int[] nextPosition = findNextPosition();
+
             if(isNextMoveFeasible(nextPosition[0], nextPosition[1])) {
                 //move:
                 row = nextPosition[0];
                 col = nextPosition[1];
+
+                if(visited.contains(nextPosition.toString() + currentDirection + reversedDirections + breakerMode)){
+                    System.out.println("LOOP");
+                    return;
+                }
+                visited.add(nextPosition.toString() + currentDirection + reversedDirections + breakerMode);
                 path.add(currentDirection);
 
                 handleCommand(map[row][col]);
 
             }else{
                 Optional<String> newDirection = findNextDirection();
-                if (newDirection.isEmpty()) {
+                if (newDirection.isEmpty()) { //no directon is feasible
                     System.out.println("LOOP");
                     return;
                 }
