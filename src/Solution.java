@@ -7,6 +7,8 @@ public class Solution {
     private static int row = -1, col = -1;
     private static char[][] map;
     private static Set<String> visited = new HashSet<>();
+    private static List<String> directions = Arrays.asList("SOUTH", "EAST", "NORTH", "WEST");
+    private static List<String> directionsInverted = Arrays.asList("WEST", "NORTH","EAST", "SOUTH");
 
 
 
@@ -54,9 +56,6 @@ public class Solution {
         }
     }
     private static Optional<String> findNextDirection() {
-        List<String> directions = Arrays.asList("SOUTH", "EAST", "NORTH", "WEST");
-        List<String> directionsInverted = Arrays.asList("WEST", "NORTH","EAST", "SOUTH");
-
         for (String dir : (reversedDirections? directionsInverted : directions)) {
             currentDirection = dir;
             int[] nextPosition = findNextPosition();
