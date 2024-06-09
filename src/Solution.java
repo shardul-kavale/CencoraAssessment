@@ -1,7 +1,4 @@
 import java.util.*;
-import java.io.*;
-import java.math.*;
-
 public class Solution {
     private static boolean reversedDirections = false;
     private static String currentDirection = "SOUTH";
@@ -10,7 +7,8 @@ public class Solution {
     private static int row = -1, col = -1;
     private static char[][] map;
     private static Set<String> visited = new HashSet<>();
-    private static int counter = 0;
+
+
 
     private static void flipDirections() {
         reversedDirections = !reversedDirections;
@@ -20,11 +18,14 @@ public class Solution {
     }
     //Find starting position
     private static void findStartingPosition(){
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
+        boolean found = false;
+        for (int i = 1; i < map.length-1 && !found; i++) {
+            for (int j = 1; j < map[i].length-1; j++) {
                 if (map[i][j] == '@') {
                     row = i;
                     col = j;
+                    found = true; //to break outer loop
+                    break;
                 }
             }
         }
@@ -53,33 +54,40 @@ public class Solution {
         }
     }
     private static Optional<String> findNextDirection() {
+        List<String> directions = Arrays.asList("SOUTH", "EAST", "NORTH", "WEST");
+        List<String> directionsInverted = Arrays.asList("WEST", "NORTH","EAST", "SOUTH");
 
-        List<String> directions = reversedDirections ?
-                Arrays.asList("WEST", "NORTH","EAST", "SOUTH") :
-                Arrays.asList("SOUTH", "EAST", "NORTH", "WEST");
-
-        for (String dir : directions) {
+        for (String dir : (reversedDirections? directionsInverted : directions)) {
             currentDirection = dir;
             int[] nextPosition = findNextPosition();
             if (isNextMoveFeasible(nextPosition[0], nextPosition[1])) {
                 return Optional.of(dir);
             }
         }
-        return Optional.empty();
+        return Optional.empty();//no feasible direction
+    }
+
+    private static void setCurrentDirection(String direction){
+        if(Set.of("NORTH", "SOUTH", "EAST", "WEST").contains(direction)){
+            currentDirection = direction;
+        }
+        else {
+            throw new IllegalArgumentException("Invalid direction: " + direction + "Try again with correct inputs");
+        }
     }
     private static void handleCommand(char command) {
         switch (command) {
             case 'N':
-                currentDirection = "NORTH";
+                setCurrentDirection("NORTH");
                 break;
             case 'S':
-                currentDirection = "SOUTH";
+                setCurrentDirection("SOUTH");
                 break;
             case 'E':
-                currentDirection = "EAST";
+                setCurrentDirection("EAST");
                 break;
             case 'W':
-                currentDirection = "WEST";
+                setCurrentDirection("WEST");
                 break;
             case 'I':
                 flipDirections();
@@ -101,8 +109,8 @@ public class Solution {
         System.exit(0);
     }
     private static void teleport(){
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
+        for (int i = 1; i < map.length-1; i++) {
+            for (int j = 1; j < map[i].length-1; j++) {
                 if (map[i][j] == 'T' && (i!=row||j!=col)) {
                     row = i;
                     col = j;
