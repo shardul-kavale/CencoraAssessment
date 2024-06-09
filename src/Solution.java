@@ -102,7 +102,7 @@ public class Solution {
     private static void teleport(){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] == 'T' && (i!=row&&j!=col)) {
+                if (map[i][j] == 'T' && (i!=row||j!=col)) {
                     row = i;
                     col = j;
                     return;
