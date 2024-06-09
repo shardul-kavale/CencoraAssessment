@@ -35,6 +35,9 @@ public class Solution {
         }
     }
     private static boolean isNextMoveFeasible(int nextRow, int nextCol) {
+        if(breakerMode && map[nextRow][nextCol] == 'X'){
+            map[nextRow][nextCol] = ' ';
+        }
         return map[nextRow][nextCol] != '#' && map[nextRow][nextCol] != 'X';
     }
     private static int[] findNextPosition() {
